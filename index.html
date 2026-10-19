@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#160f2d" />
+    <title>Một bó hoa nhỏ tặng các bạn nữ 💐</title>
+    <style>
+        :root {
+            --night: #160f2d;
+            --pink: #ff9fc8;
+            --soft-pink: #ffd9e9;
+            --deep-pink: #df4d91;
+            --mint: #77d4a0;
+            --gold: #ffe6a0;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100svh;
+            overflow-x: hidden;
+            color: #fff7fc;
+            font-family: "Segoe UI", system-ui, sans-serif;
+            background:
+                    radial-gradient(ellipse at 50% 42%, rgba(139, 79, 161, .32), transparent 43%),
+                    radial-gradient(circle at 12% 18%, rgba(255, 112, 175, .15), transparent 25%),
+                    radial-gradient(circle at 90% 72%, rgba(112, 107, 218, .13), transparent 26%),
+                    linear-gradient(155deg, #211638 0%, #100e29 52%, #271438 100%);
+            background-size: 140% 140%;
+            animation: nightShift 14s ease-in-out infinite alternate;
+        }
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            opacity: .15;
+            background-image: radial-gradient(rgba(255,255,255,.7) .6px, transparent .7px);
+            background-size: 5px 5px;
+            mask-image: linear-gradient(transparent, #000 20%, #000 80%, transparent);
+        }
+        .scene {
+            position: relative;
+            z-index: 1;
+            min-height: 100svh;
+            width: min(100%, 760px);
+            margin: 0 auto;
+            padding: 32px 18px 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            isolation: isolate;
+            text-align: center;
+        }
+        .eyebrow {
+            margin: 0 0 8px;
+            color: #ffc4df;
+            font-size: .72rem;
+            letter-spacing: .28em;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: fadeUp .8s .18s forwards;
+        }
+        h1 {
+            margin: 0;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: clamp(2rem, 6.5vw, 3.45rem);
+            font-weight: 500;
+            line-height: 1.1;
+            text-shadow: 0 0 30px rgba(255, 143, 189, .24);
+            opacity: 0;
+            animation: fadeUp .9s .35s forwards;
+        }
+        h1 span { color: #ffadd0; font-style: italic; }
+        .subtitle {
+            margin: 10px 0 0;
+            color: #e8c8df;
+            font-size: .96rem;
+            opacity: 0;
+            animation: fadeUp .8s .55s forwards;
+        }
+
+        .bouquet-stage {
+            position: relative;
+            flex: 0 0 auto;
+            width: min(370px, 94vw);
+            height: 350px;
+            margin: 4px 0 -1px;
+            filter: drop-shadow(0 22px 23px rgba(0, 0, 0, .2));
+            animation: bouquetEnter 1.05s .25s cubic-bezier(.2,.8,.25,1.12) both;
+        }
+        .halo {
+            position: absolute;
+            width: 285px;
+            height: 285px;
+            top: 23px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 135, 192, .2), rgba(185, 113, 209, .06) 55%, transparent 72%);
+            filter: blur(9px);
+            animation: haloPulse 4s ease-in-out infinite;
+        }
+        .stem {
+            position: absolute;
+            z-index: 1;
+            top: var(--top);
+            left: calc(var(--left) + 50% - 158.5px);
+            width: 5px;
+            height: var(--length, 205px);
+            border-radius: 100%;
+            background: linear-gradient(90deg, #267650, #9ae7ad 48%, #38845e);
+            transform: rotate(var(--angle)) scaleY(0);
+            transform-origin: top center;
+            animation: growStem 1s var(--delay, .7s) ease-out forwards;
+        }
+        .leaf {
+            position: absolute;
+            z-index: 2;
+            width: 62px;
+            height: 28px;
+            opacity: 0;
+            background: linear-gradient(140deg, #b1f0bc, #4cab78 75%);
+            box-shadow: inset 0 1px 4px rgba(255,255,255,.28);
+            border-radius: 100% 0 100% 0;
+            transform-origin: right bottom;
+            animation: leafOpen .7s var(--delay, 1.2s) ease-out forwards;
+        }
+        .leaf::after {
+            content: "";
+            position: absolute;
+            left: 8px; right: 8px; top: 50%; height: 1px;
+            background: rgba(224,255,224,.5);
+            transform: rotate(-9deg);
+        }
+        .leaf.l1 { left: 72px; top: 219px; transform: rotate(17deg) scale(.1); }
+        .leaf.l2 { left: 231px; top: 230px; border-radius: 0 100% 0 100%; transform-origin: left bottom; transform: rotate(-20deg) scale(.1); animation-name: leafOpenRight; }
+        .leaf.l3 { left: 117px; top: 254px; width: 48px; height: 22px; transform: rotate(10deg) scale(.1); animation-delay: 1.6s; }
+
+        .wrap {
+            position: absolute;
+            z-index: 4;
+            top: 211px;
+            left: 50%;
+            width: 236px;
+            height: 128px;
+            transform: translateX(-50%);
+            clip-path: polygon(0 0, 100% 0, 67% 100%, 34% 100%);
+            background: linear-gradient(110deg, #f2c8e0 0%, #fff0f8 23%, #dca5cf 48%, #ffe1ef 73%, #bd84bd 100%);
+            filter: drop-shadow(0 6px 7px rgba(10,0,25,.24));
+            opacity: 0;
+            animation: wrapAppear .8s 1.1s ease-out forwards;
+        }
+        .wrap::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(110deg, transparent 0 17px, rgba(255,255,255,.26) 18px 20px, transparent 21px 36px);
+            mix-blend-mode: screen;
+        }
+        .wrap-side {
+            position: absolute;
+            z-index: 3;
+            top: 211px;
+            left: 50%;
+            width: 240px;
+            height: 118px;
+            clip-path: polygon(0 0, 50% 21%, 35% 100%);
+            background: linear-gradient(135deg, #d89ac6, #f4c9e5);
+            opacity: 0;
+            animation: wrapAppear .8s 1.05s ease-out forwards;
+        }
+        .bow {
+            position: absolute;
+            z-index: 6;
+            top: 252px;
+            left: 50%;
+            width: 83px;
+            height: 48px;
+            transform: translateX(-50%) scale(.1);
+            opacity: 0;
+            animation: bowPop .65s 1.65s cubic-bezier(.2,.8,.2,1.3) forwards;
+        }
+        .bow::before, .bow::after {
+            content: "";
+            position: absolute;
+            top: 4px;
+            width: 35px;
+            height: 26px;
+            border: 2px solid rgba(255, 232, 246, .9);
+            background: linear-gradient(135deg, #ffacd1, #d94d98);
+            box-shadow: inset 0 2px 6px rgba(255,255,255,.34), 0 3px 7px rgba(102,25,78,.2);
+        }
+        .bow::before { left: 4px; border-radius: 80% 15% 65% 20%; transform: rotate(18deg); }
+        .bow::after { right: 4px; border-radius: 15% 80% 20% 65%; transform: rotate(-18deg); }
+        .bow-knot {
+            position: absolute;
+            z-index: 1;
+            left: 33px; top: 10px;
+            width: 18px; height: 18px;
+            border-radius: 40% 50% 50% 40%;
+            background: radial-gradient(circle at 30% 25%, #ffe4f1, #ff8cbd 55%, #cf3e87);
+            box-shadow: 0 0 8px rgba(255, 190, 225, .4);
+        }
+        .bow-ribbon {
+            position: absolute;
+            top: 26px;
+            width: 17px;
+            height: 23px;
+            background: linear-gradient(90deg, #db4d94, #ffadd1);
+            clip-path: polygon(0 0,100% 0,80% 100%,50% 76%,15% 100%);
+        }
+        .bow-ribbon.left { left: 24px; transform: rotate(15deg); }
+        .bow-ribbon.right { right: 24px; transform: rotate(-15deg); }
+
+        .flower {
+            position: absolute;
+            z-index: 3;
+            width: 130px;
+            height: 130px;
+            left: calc(var(--x) + 50% - 158.5px);
+            top: var(--y);
+            transform: scale(var(--scale, 1));
+            transform-origin: 50% 50%;
+            animation: flowerSway var(--sway, 4s) ease-in-out infinite;
+            animation-delay: var(--sway-delay, 0s);
+        }
+        .petal {
+            position: absolute;
+            left: 50%; top: 50%;
+            width: 46px; height: 68px;
+            margin-left: -23px; margin-top: -61px;
+            border-radius: 52% 52% 43% 43%;
+            transform-origin: 50% 89%;
+            transform: rotate(var(--rot)) scale(.02);
+            opacity: 0;
+            background: linear-gradient(145deg, var(--light), var(--mid) 48%, var(--deep));
+            box-shadow: inset -5px -5px 9px rgba(94, 15, 73, .12), inset 4px 4px 9px rgba(255,255,255,.42);
+            animation: petalBloom .8s cubic-bezier(.17,.8,.25,1.25) forwards;
+            animation-delay: calc(var(--flower-delay, .55s) + var(--i) * .075s);
+        }
+        .flower .core {
+            position: absolute;
+            left: 50%; top: 50%; z-index: 2;
+            width: 31px; height: 31px;
+            transform: translate(-50%,-50%) scale(0);
+            border-radius: 50%;
+            background: radial-gradient(circle at 33% 25%, #fff4bd, #ffd75e 50%, #d98c35 100%);
+            box-shadow: 0 0 16px rgba(255, 212, 96, .48), inset 0 2px 4px rgba(255,255,255,.7);
+            animation: corePop .55s calc(var(--flower-delay, .55s) + .75s) cubic-bezier(.2,.8,.3,1.35) forwards;
+        }
+        .flower .core::after {
+            content: ""; position: absolute; inset: 5px;
+            border: 1px dotted rgba(161, 92, 22, .55); border-radius: 50%;
+        }
+        .flower.pink { --light:#fff0f7; --mid:#ffb2d3; --deep:#df4c93; }
+        .flower.rose { --light:#ffe3ec; --mid:#f88caf; --deep:#d83979; }
+        .flower.lilac { --light:#f9e8ff; --mid:#d9a2f3; --deep:#a55cc5; }
+        .flower.peach { --light:#fff0d7; --mid:#ffbdad; --deep:#ee788e; }
+        .flower.center-flower { --light:#fff0f8; --mid:#ff9fcb; --deep:#dc438e; }
+
+        .message {
+            max-width: 490px;
+            margin: -1px 0 18px;
+            color: #f7ddeb;
+            font-size: clamp(.95rem, 2.8vw, 1.08rem);
+            line-height: 1.75;
+            opacity: 0;
+            animation: fadeUp .9s 1.8s forwards;
+        }
+        .message strong { color: #ffb7d5; font-weight: 600; }
+        .actions { display:flex; flex-wrap:wrap; justify-content:center; gap:10px; opacity:0; animation:fadeUp .8s 2.1s forwards; }
+        button {
+            border: 1px solid rgba(255, 205, 227, .58);
+            padding: 12px 21px;
+            border-radius: 999px;
+            color: #fff8fc;
+            background: linear-gradient(135deg, rgba(249, 112, 172, .94), rgba(166, 91, 184, .94));
+            font: inherit; font-size: .94rem; cursor: pointer;
+            box-shadow: 0 8px 26px rgba(216, 77, 150, .24);
+            transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
+        }
+        button.secondary { background: rgba(255,255,255,.065); box-shadow:none; border-color:rgba(255,210,235,.28); }
+        button:hover { transform: translateY(-2px); box-shadow: 0 11px 30px rgba(216, 77, 150, .38); filter:brightness(1.08); }
+        button:active { transform: translateY(0) scale(.98); }
+
+        .letter {
+            position: fixed; z-index: 30; inset: 0;
+            display: grid; place-items: center; padding: 22px;
+            background: rgba(9, 7, 25, .68); backdrop-filter: blur(10px);
+            opacity: 0; pointer-events: none; transition: opacity .35s ease;
+        }
+        .letter.open { opacity: 1; pointer-events: auto; }
+        .letter-card {
+            width: min(450px, 100%); padding: 30px 26px;
+            border: 1px solid rgba(255, 190, 220, .48); border-radius: 28px;
+            text-align: center; background: linear-gradient(145deg, #30204f, #17142f 80%);
+            box-shadow: 0 25px 80px rgba(0,0,0,.4);
+            transform: translateY(18px) scale(.96); transition: transform .35s ease;
+        }
+        .letter.open .letter-card { transform: translateY(0) scale(1); }
+        .letter-card .emoji { font-size: 2rem; animation: heartBeat 1.4s ease-in-out infinite; }
+        .letter-card h2 { margin: 12px 0; color: #ffc1dc; font: 500 1.8rem Georgia,serif; }
+        .letter-card p { margin: 0 0 22px; line-height: 1.85; color: #f7e9f3; }
+        .letter-card button { animation:none; opacity:1; }
+
+        .star {
+            position: fixed; z-index: 0; border-radius: 50%;
+            background: #fff3fa; box-shadow: 0 0 9px 2px rgba(255,197,224,.62);
+            animation: twinkle var(--dur) ease-in-out infinite alternate;
+            pointer-events: none;
+        }
+        .heart, .floating-petal, .sparkle {
+            position: fixed; z-index: 20; bottom: -35px; left: var(--x);
+            pointer-events: none; opacity: 0;
+            animation: floatUp var(--dur) linear forwards;
+            color: var(--color, #ff9ec8); font-size: var(--size, 20px);
+            text-shadow: 0 0 12px rgba(255,120,180,.5);
+        }
+        .floating-petal { border-radius: 80% 10% 80% 10%; width: 12px; height: 19px; background: linear-gradient(135deg,#ffe6f2,#f16da8); box-shadow:0 0 12px rgba(255,150,205,.35); }
+        .sparkle { color:#fff0ba; text-shadow:0 0 14px #ffcf85; }
+        .click-note { margin-top: 13px; color: rgba(255,222,239,.62); font-size: .75rem; letter-spacing: .04em; }
+
+        @keyframes nightShift { from { background-position: 0% 30%; } to { background-position: 100% 70%; } }
+        @keyframes fadeUp { from {opacity:0; transform:translateY(12px)} to {opacity:1; transform:translateY(0)} }
+        @keyframes bouquetEnter { from {opacity:0; translate:0 18px} to {opacity:1; translate:0 0} }
+        @keyframes haloPulse { 0%,100% { opacity:.6; transform:translateX(-50%) scale(.92) } 50% { opacity:1; transform:translateX(-50%) scale(1.08) } }
+        @keyframes growStem { to { transform:rotate(var(--angle)) scaleY(1) } }
+        @keyframes leafOpen { to {opacity:1; transform:rotate(17deg) scale(1)} }
+        @keyframes leafOpenRight { to {opacity:1; transform:rotate(-20deg) scale(1)} }
+        @keyframes wrapAppear { from {opacity:0; transform:translateX(-50%) translateY(12px) scale(.92)} to {opacity:1; transform:translateX(-50%) translateY(0) scale(1)} }
+        @keyframes bowPop { to {opacity:1; transform:translateX(-50%) scale(1)} }
+        @keyframes petalBloom { 0% {opacity:0; transform:rotate(var(--rot)) translateY(9px) scale(.02)} 75% {opacity:1; transform:rotate(var(--rot)) translateY(-2px) scale(1.06)} 100% {opacity:1; transform:rotate(var(--rot)) translateY(0) scale(1)} }
+        @keyframes corePop { to { transform:translate(-50%,-50%) scale(1) } }
+        @keyframes flowerSway { 0%,100% { rotate:-1.2deg } 50% { rotate:1.8deg } }
+        @keyframes twinkle { from {opacity:.18; transform:scale(.65)} to {opacity:1; transform:scale(1.45)} }
+        @keyframes floatUp { 0% { opacity:0; transform:translate3d(0,0,0) rotate(0deg) scale(.75) } 12% {opacity:.92} 100% {opacity:0; transform:translate3d(var(--drift,35px),-115svh,0) rotate(var(--spin,180deg)) scale(1.15)} }
+        @keyframes heartBeat { 0%,100% {transform:scale(1)} 14% {transform:scale(1.12)} 28% {transform:scale(1)} 42% {transform:scale(1.08)} }
+        @media (max-width: 420px) {
+            .scene { padding-top: 25px; padding-bottom: 24px; }
+            .bouquet-stage { height: 320px; transform: scale(.91); transform-origin: top center; margin-bottom: -15px; }
+            .message { max-width: 340px; }
+            .wrap { top: 203px; }
+            .wrap-side { top:203px; }
+            .bow { top:244px; }
+        }
+        @media (max-height: 800px) and (min-width: 421px) {
+            .scene { padding-top: 18px; padding-bottom: 18px; }
+            .bouquet-stage { transform:scale(.86); transform-origin:top center; margin-bottom:-45px; }
+        }
+        /* Fit the complete greeting and bouquet on short laptop / small browser windows. */
+        @media (max-height: 560px) and (min-width: 421px) {
+            .scene { padding: 10px 14px 10px; justify-content: flex-start; }
+            .eyebrow { display: none; }
+            h1 { font-size: clamp(1.55rem, 4.2vw, 1.8rem); line-height: 1.02; }
+            .subtitle { margin-top: 5px; font-size: .78rem; }
+            .bouquet-stage {
+                transform: scale(.78);
+                transform-origin: top center;
+                margin-top: 0;
+                margin-bottom: -80px;
+            }
+            .message { max-width: 460px; margin: 0 0 6px; font-size: .78rem; line-height: 1.3; }
+            .actions { gap: 6px; }
+            button { padding: 7px 12px; font-size: .78rem; }
+            .click-note { margin-top: 6px; font-size: .66rem; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation-duration:.01ms !important; animation-iteration-count:1 !important; scroll-behavior:auto !important; }
+        }
+    </style>
+</head>
+<body>
+<main class="scene" aria-label="Bó hoa chúc mừng ngày Phụ nữ Việt Nam">
+    <p class="eyebrow">a little gift for our lovely girls</p>
+    <h1>Một bó hoa nhỏ<br><span>tặng các cậu 🌷</span></h1>
+    <p class="subtitle">Gói bằng một chút dịu dàng, gửi đến những bông hoa tuyệt vời của nhóm mình. ✨</p>
+
+    <div class="bouquet-stage" id="bouquet" role="img" aria-label="Bó hoa hồng, hoa tím và hoa đào đang nở">
+        <div class="halo"></div>
+        <div class="stem" style="--left:75px;--top:119px;--angle:-18deg;--length:104px;--delay:.7s"></div>
+        <div class="stem" style="--left:143px;--top:86px;--angle:-8deg;--length:137px;--delay:.8s"></div>
+        <div class="stem" style="--left:238px;--top:122px;--angle:16deg;--length:101px;--delay:.9s"></div>
+        <div class="stem" style="--left:101px;--top:171px;--angle:-18deg;--length:51px;--delay:1s"></div>
+        <div class="stem" style="--left:201px;--top:170px;--angle:5deg;--length:51px;--delay:1.05s"></div>
+        <div class="leaf l1"></div><div class="leaf l2"></div><div class="leaf l3"></div>
+        <div class="flower pink" style="--x:10px;--y:55px;--scale:.82;--flower-delay:.72s;--sway:4.3s;--sway-delay:-1s"></div>
+        <div class="flower lilac" style="--x:79px;--y:0px;--scale:.9;--flower-delay:.5s;--sway:4.8s;--sway-delay:-2s"></div>
+        <div class="flower peach" style="--x:177px;--y:47px;--scale:.84;--flower-delay:.86s;--sway:4.1s;--sway-delay:-.7s"></div>
+        <div class="flower rose" style="--x:40px;--y:112px;--scale:.73;--flower-delay:1.02s;--sway:4.5s;--sway-delay:-2.7s"></div>
+        <div class="flower center-flower" style="--x:130px;--y:105px;--scale:.79;--flower-delay:1.12s;--sway:4.4s;--sway-delay:-1.8s"></div>
+        <div class="wrap-side"></div><div class="wrap"></div>
+        <div class="bow"><span class="bow-knot"></span><span class="bow-ribbon left"></span><span class="bow-ribbon right"></span></div>
+    </div>
+
+    <p class="message">
+        Nhân ngày Phụ nữ Việt Nam 20/10, gửi đến các bạn một bó hoa nhỏ cùng thật nhiều lời chúc tốt đẹp.<br>
+        <strong>Chúc các bạn luôn vui vẻ, tự tin, hạnh phúc và rạng rỡ theo cách riêng của mình. 💗</strong>
+    </p>
+    <div class="actions">
+        <button id="openLetter" type="button">Đọc lời chúc nhỏ 💌</button>
+        <button id="magicButton" class="secondary" type="button">Rắc thêm phép màu ✨</button>
+    </div>
+    <p class="click-note">Chạm vào bó hoa để xem phép màu nè ♡</p>
+</main>
+
+<div class="letter" id="letter" role="dialog" aria-modal="true" aria-labelledby="letterTitle">
+    <div class="letter-card">
+        <div class="emoji">💐💗✨</div>
+        <h2 id="letterTitle">Gửi những bông hoa của nhóm mình 🌷</h2>
+        <p>
+            Tớ chẳng giỏi nói những lời hoa mỹ cũng như chẳng thể mang cả vườn hoa gửi đến các cậu, nhờ bó hoa nhỏ này thay lời chúc các bạn luôn xinh tươi, vui vẻ, gặp nhiều may mắn và đạt được những điều mình mong muốn.<br><br>
+            Cảm ơn các bạn vì đã góp phần tăng vẻ đẹp của chúng mình. Chúc mọi người luôn tự tin, hạnh phúc và có thật nhiều niềm vui mỗi ngày. Mong rằng hôm nay các bạn sẽ nhận được thật nhiều hoa, quà và những lời chúc dễ thương nhé! <strong style="color:#ffb7d5">Chúc các bạn luôn tỏa sáng theo cách riêng của mình.</strong> 💐💗
+        </p>
+        <button id="closeLetter" type="button">Chúc các bạn 20/10 thật vui nhé! 💗</button>
+    </div>
+</div>
+
+<script>
+    // Tạo 8 cánh hoa cho mỗi bông và lần lượt cho chúng nở.
+    document.querySelectorAll('.flower').forEach((flower) => {
+        for (let i = 0; i < 8; i++) {
+            const petal = document.createElement('span');
+            petal.className = 'petal';
+            petal.style.setProperty('--rot', `${i * 45}deg`);
+            petal.style.setProperty('--i', i);
+            flower.appendChild(petal);
+        }
+        const core = document.createElement('span');
+        core.className = 'core';
+        flower.appendChild(core);
+    });
+
+    // Sao lấp lánh trên nền trời.
+    for (let i = 0; i < 62; i++) {
+        const star = document.createElement('span');
+        star.className = 'star';
+        star.style.left = `${Math.random() * 100}%`;
+        star.style.top = `${Math.random() * 100}%`;
+        star.style.setProperty('--dur', `${1.4 + Math.random() * 3.8}s`);
+        star.style.animationDelay = `${Math.random() * 4}s`;
+        const size = 1 + Math.random() * 2.2;
+        star.style.width = `${size}px`;
+        star.style.height = `${size}px`;
+        document.body.appendChild(star);
+    }
+
+    const letter = document.getElementById('letter');
+    document.getElementById('openLetter').addEventListener('click', () => {
+        letter.classList.add('open');
+        shower(26);
+    });
+    document.getElementById('closeLetter').addEventListener('click', () => letter.classList.remove('open'));
+    letter.addEventListener('click', (event) => { if (event.target === letter) letter.classList.remove('open'); });
+    document.addEventListener('keydown', (event) => { if (event.key === 'Escape') letter.classList.remove('open'); });
+
+    document.getElementById('magicButton').addEventListener('click', () => shower(34));
+    document.getElementById('bouquet').addEventListener('click', () => shower(15));
+
+    function shower(count) {
+        const symbols = ['♡', '♥', '✦', '💕', '✨'];
+        for (let i = 0; i < count; i++) {
+            const item = document.createElement('span');
+            const kind = Math.random();
+            item.className = kind < .48 ? 'heart' : kind < .78 ? 'sparkle' : 'floating-petal';
+            if (item.classList.contains('floating-petal')) item.textContent = '';
+            else item.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+            item.style.setProperty('--x', `${Math.random() * 100}%`);
+            item.style.setProperty('--size', `${13 + Math.random() * 23}px`);
+            item.style.setProperty('--dur', `${2.8 + Math.random() * 3.3}s`);
+            item.style.setProperty('--drift', `${-70 + Math.random() * 140}px`);
+            item.style.setProperty('--spin', `${-240 + Math.random() * 480}deg`);
+            item.style.setProperty('--color', ['#ff9ec8', '#ffe9a9', '#dcb8ff', '#fff0f8'][Math.floor(Math.random() * 4)]);
+            document.body.appendChild(item);
+            item.addEventListener('animationend', () => item.remove(), { once: true });
+        }
+    }
+
+    // Cánh hoa bay nhẹ nhàng liên tục để khung cảnh có sức sống.
+    function driftPetal() {
+        const petal = document.createElement('span');
+        petal.className = 'floating-petal';
+        petal.style.left = `${Math.random() * 100}%`;
+        petal.style.setProperty('--x', `${Math.random() * 100}%`);
+        petal.style.setProperty('--dur', `${7 + Math.random() * 7}s`);
+        petal.style.setProperty('--drift', `${-100 + Math.random() * 200}px`);
+        petal.style.setProperty('--spin', `${-300 + Math.random() * 600}deg`);
+        petal.style.animationDelay = `${Math.random() * 3}s`;
+        petal.style.opacity = '.45';
+        document.body.appendChild(petal);
+        petal.addEventListener('animationend', () => petal.remove(), { once: true });
+    }
+    for (let i = 0; i < 7; i++) driftPetal();
+    setInterval(driftPetal, 1800);
+</script>
+</body>
+</html>
