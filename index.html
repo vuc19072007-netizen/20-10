@@ -373,8 +373,8 @@
     </style>
 </head>
 <body>
-    <audio id="bgMusic" loop preload="none">
-  <source src="./nhac.mp3" type="audio/mpeg">
+<audio id="bgMusic" loop preload="auto">
+    <source src="nhac.mp3" type="audio/mpeg">
 </audio>
 <main class="scene" aria-label="Bó hoa chúc mừng ngày Phụ nữ Việt Nam">
     <p class="eyebrow">a little gift for our lovely girls</p>
@@ -470,18 +470,18 @@
     bgMusic.volume = 0.35;
 
     musicButton.addEventListener('click', async () => {
-       if (bgMusic.paused) {
-          try {
-             await bgMusic.play();
-             musicButton.textContent = '⏸ Tắt nhạc 🎵';
-          } catch (error) {
-             musicButton.textContent = 'Lỗi phát nhạc — kiểm tra file MP3';
-             console.error(error);
-          }
-       } else {
-           bgMusic.pause();
-           musicButton.textContent = '▶ Bật nhạc 🎵';
-       }
+        if (bgMusic.paused) {
+            try {
+                await bgMusic.play();
+                musicButton.textContent = '⏸ Tắt nhạc 🎵';
+            } catch (error) {
+                musicButton.textContent = 'Lỗi phát nhạc — kiểm tra file MP3';
+                console.error(error);
+            }
+        } else {
+            bgMusic.pause();
+            musicButton.textContent = '▶ Bật nhạc 🎵';
+        }
     });
     function shower(count) {
         const symbols = ['♡', '♥', '✦', '💕', '✨'];
